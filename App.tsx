@@ -9,6 +9,8 @@ import FarmInfo from "./screens/(stacks)/FarmInfo";
 import Verification from "./screens/(stacks)/Verification";
 import BusinessHours from "./screens/(stacks)/BusinessHours";
 import Confirmation from "./screens/(stacks)/Confirmation";
+import Welcome from "./screens/(stacks)/Welcome";
+import EmailVerificationScreen from "./screens/(stacks)/EmailVerificationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +18,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="EmailVerificationScreen"
         screenOptions={{
           headerShown: false,
         }}
@@ -24,12 +26,17 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="OtpScreen" component={OtpScreen} />
+        <Stack.Screen
+          name="EmailVerificationScreen"
+          component={EmailVerificationScreen}
+        />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="FarmInfo" component={FarmInfo} />
+        <Stack.Screen name="Welcome" component={Welcome} />
+        {/* <Stack.Screen name="FarmInfo" component={FarmInfo} />
         <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="BusinessHours" component={BusinessHours} />
-        <Stack.Screen name="Confirmation" component={Confirmation} />
+        <Stack.Screen name="Confirmation" component={Confirmation} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

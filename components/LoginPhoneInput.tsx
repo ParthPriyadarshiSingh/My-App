@@ -17,45 +17,58 @@ interface Props {
   email: string;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
+  setIsEmailValid: (isEmailValid: boolean) => void;
+  setIsPasswordValid: (isPasswordValid: boolean) => void;
+  onVerify: () => void;
 }
 
-const MobileNumberInput = ({ email, setEmail, setPassword }: Props) => {
+const LoginPhoneInput = ({
+  email,
+  setEmail,
+  setPassword,
+  setIsEmailValid,
+  setIsPasswordValid,
+  onVerify,
+}: Props) => {
   useEffect(() => {
-    setMobileNumber("");
-    setMobileError("");
-    setIsMobileValid(true);
+    setPhoneNumber("");
+    setPhoneError("");
+    setIsPhoneValid(true);
   }, [email]);
   const [selectedCountry, setSelectedCountry] = useState(["🇮🇳", "+91", "IN"]);
   const [clicked, setClicked] = useState(false);
   const [data, setData] = useState(CountryData);
-  const [mobileNumber, setMobileNumber] = useState<string>("");
-  const [ismobileValid, setIsMobileValid] = useState<boolean>(true);
-  const [mobileError, setMobileError] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [isPhoneValid, setIsPhoneValid] = useState<boolean>(true);
+  const [phoneError, setPhoneError] = useState<string>("");
 
   const handleBlur = (): void => {
-    if (mobileNumber === "") {
-      setIsMobileValid(false);
-      setMobileError("Required");
+    if (phoneNumber === "") {
+      setIsPhoneValid(false);
+      setPhoneError("Required");
     }
   };
 
-  const handleUpdateMobileNumber = (text: string) => {
-    setMobileNumber(text);
+  const handleUpdatePhoneNumber = (text: string) => {
+    setPhoneNumber(text);
+    console.log(text);
     if (text !== "") {
       setEmail("");
       setPassword("");
-      setIsMobileValid(true);
-      setMobileError("");
+      setIsEmailValid(true);
+      setIsPasswordValid(true);
+      setIsPhoneValid(true);
+      setPhoneError("");
     }
   };
 
-  const validateMobileNumber = (mobileNumber: string, countryCode: any) => {
+  const validatePhoneNumber = (phoneNumber: string, countryCode: any) => {
     try {
-      const mobileNumberObj = parsePhoneNumberFromString(
-        mobileNumber,
+      const phoneNumberObj = parsePhoneNumberFromString(
+        phoneNumber,
         countryCode
       );
-      if (mobileNumberObj && mobileNumberObj.isValid()) {
+      if (phoneNumberObj && phoneNumberObj.isValid()) {
         return true; // Valid phone number format
       }
     } catch (error) {
@@ -65,15 +78,13 @@ const MobileNumberInput = ({ email, setEmail, setPassword }: Props) => {
   };
 
   const onVerifyPress = (): void => {
-    if (
-      mobileNumber &&
-      validateMobileNumber(mobileNumber, selectedCountry[2])
-    ) {
-      setIsMobileValid(true);
-      setMobileError("");
+    if (phoneNumber && validatePhoneNumber(phoneNumber, selectedCountry[2])) {
+      setIsPhoneValid(true);
+      setPhoneError("");
+      onVerify();
     } else {
-      setIsMobileValid(false);
-      setMobileError("Invalid format");
+      setIsPhoneValid(false);
+      setPhoneError("Invalid format");
     }
   };
 
@@ -90,12 +101,12 @@ const MobileNumberInput = ({ email, setEmail, setPassword }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: "red" }}>{mobileError}</Text>
+      <Text style={{ color: "red" }}>{phoneError}</Text>
       <View style={styles.numberContainer}>
         <TouchableOpacity
           style={[
             styles.dropdownBox,
-            !ismobileValid && { borderWidth: 1.5, borderRightWidth: 0 },
+            !isPhoneValid && { borderWidth: 1.5, borderRightWidth: 0 },
           ]}
           activeOpacity={0.6}
           onPress={() => setClicked(!clicked)}
@@ -122,14 +133,14 @@ const MobileNumberInput = ({ email, setEmail, setPassword }: Props) => {
         <TextInput
           style={[
             styles.numberInput,
-            !ismobileValid && { borderWidth: 1.5, borderLeftWidth: 0 },
+            !isPhoneValid && { borderWidth: 1.5, borderLeftWidth: 0 },
           ]}
-          placeholder="Mobile Number"
+          placeholder="Phone Number"
           keyboardType="numeric"
           returnKeyType="done"
           maxLength={10}
-          value={mobileNumber}
-          onChangeText={(text) => handleUpdateMobileNumber(text)}
+          value={phoneNumber}
+          onChangeText={(text) => handleUpdatePhoneNumber(text)}
           onBlur={handleBlur}
         />
       </View>
@@ -182,7 +193,6 @@ const MobileNumberInput = ({ email, setEmail, setPassword }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
     gap: 10,
   },
   numberContainer: {
@@ -265,10 +275,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#d5715b",
   },
   btnText: {
+    letterSpacing: 1.1,
     fontSize: 24,
     fontWeight: "500",
     color: "#fff",
   },
 });
 
-export default MobileNumberInput;
+export default LoginPhoneInput;

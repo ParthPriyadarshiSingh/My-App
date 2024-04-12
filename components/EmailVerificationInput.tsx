@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import {
   View,
   TextInput,
@@ -8,21 +8,21 @@ import {
 } from "react-native";
 
 interface Props {
-  otp: string[];
-  setOtp: (otp: string[]) => void;
-  otpLength: number;
+  code: string[];
+  setCode: (code: string[]) => void;
+  codeLength: number;
 }
 
-const OtpInput = ({ otp, setOtp, otpLength }: Props) => {
-  const otpInputRefs = useRef<TextInput[]>(new Array(otpLength).fill(null));
+const EmailVerificationInput = ({ code, setCode, codeLength }: Props) => {
+  const otpInputRefs = useRef<TextInput[]>(new Array(codeLength).fill(null));
 
   const handleOTPInputChange = (text: string, index: number): void => {
-    const updatedOtp = [...otp];
-    updatedOtp[index] = text;
-    setOtp(updatedOtp);
+    const updatedCode = [...code];
+    updatedCode[index] = text;
+    setCode(updatedCode);
     if (
       text !== "" &&
-      index < otpLength - 1 &&
+      index < codeLength - 1 &&
       otpInputRefs.current[index + 1]
     ) {
       otpInputRefs.current[index + 1]?.focus();
@@ -33,15 +33,15 @@ const OtpInput = ({ otp, setOtp, otpLength }: Props) => {
     event: NativeSyntheticEvent<TextInputKeyPressEventData>
   ): void => {
     const { key } = event.nativeEvent;
-    const index = otp.findIndex((value) => value === "");
-    if (key === "Backspace" && index > 0 && otp[index] === "") {
+    const index = code.findIndex((value) => value === "");
+    if (key === "Backspace" && index > 0 && code[index] === "") {
       otpInputRefs.current[index - 1]?.focus();
     }
   };
 
   return (
     <View style={styles.container}>
-      {otp.map((value, index) => (
+      {code.map((value, index) => (
         <TextInput
           key={index}
           style={styles.input}
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OtpInput;
+export default EmailVerificationInput;

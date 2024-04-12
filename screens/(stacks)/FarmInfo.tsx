@@ -37,7 +37,6 @@ const FarmInfo = ({ navigation, route }: any) => {
       zip_code: zipCode,
     };
     signupDetails = { ...signupDetails, ...newDetails };
-    // setSignupDetails(updatedSignupDetails);
     console.log(signupDetails);
     navigation.navigate("Verification", { signupDetails });
   };

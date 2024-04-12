@@ -8,8 +8,8 @@ import {
   Dimensions,
 } from "react-native";
 
-import React, { useRef, useState } from "react";
-import MobileNumberInput from "../../components/MobileNumberInput";
+import React, { useState } from "react";
+import LoginPhoneInput from "../../components/LoginPhoneInput";
 import KeyboardAvoidingWrapper from "../../components/KeyboardAvoidingWrapper";
 
 const atIcon = require("../../assets/images/Vector2x-1.png");
@@ -26,13 +26,6 @@ const Login = ({ navigation }: any) => {
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
-  const [mobileNumber, setMobileNumber] = useState<string>("");
-  const [countryCode, setCountryCode] = useState<string>("");
-
-  const handleMobileData = (mobile: string, code: string) => {
-    setMobileNumber(mobile);
-    setCountryCode(code);
-  };
 
   const handleEmailInputChange = (text: string): void => {
     if (text !== "") {
@@ -73,7 +66,9 @@ const Login = ({ navigation }: any) => {
     }
   };
 
-  const onVerifyPress = (): void => {};
+  const onVerifyPress = (): void => {
+    navigation.navigate("OtpScreen");
+  };
 
   return (
     <KeyboardAvoidingWrapper>
@@ -86,7 +81,9 @@ const Login = ({ navigation }: any) => {
             <Text style={styles.createAccBtn}>Create account</Text>
           </TouchableOpacity>
         </View>
-        <Text style={{ color: "red" }}>{emailError}</Text>
+        {!isEmailValid ? (
+          <Text style={{ color: "red" }}>{emailError}</Text>
+        ) : null}
         <View>
           <Image
             source={atIcon}
@@ -102,10 +99,11 @@ const Login = ({ navigation }: any) => {
             placeholder="Email Address"
             value={email}
             onChangeText={(text) => handleEmailInputChange(text)}
-            // onBlur={handleEmailInputBlur}
           ></TextInput>
         </View>
-        <Text style={{ color: "red" }}>{passwordError}</Text>
+        {!isPasswordValid ? (
+          <Text style={{ color: "red" }}>{passwordError}</Text>
+        ) : null}
         <View>
           <Image
             source={lockIcon}
@@ -121,7 +119,6 @@ const Login = ({ navigation }: any) => {
             placeholder="Password"
             value={password}
             onChangeText={(text) => handlePasswordInputChange(text)}
-            // onBlur={handlePasswordInputBlur}
           ></TextInput>
           <TouchableOpacity
             style={styles.forgotBtn}
@@ -134,16 +131,15 @@ const Login = ({ navigation }: any) => {
           <Text style={styles.btnText}>Login</Text>
         </TouchableOpacity>
         <Text style={styles.orText}>or login with</Text>
-        <MobileNumberInput
+        <LoginPhoneInput
           email={email}
-          password={password}
           setEmail={setEmail}
           setPassword={setPassword}
-          sendMobileData={handleMobileData}
+          setIsEmailValid={setIsEmailValid}
+          setIsPasswordValid={setIsPasswordValid}
+          onVerify={onVerifyPress}
         />
-        {/* <TouchableOpacity style={styles.btn} onPress={onVerifyPress}>
-          <Text style={styles.btnText}>Verify OTP</Text>
-        </TouchableOpacity> */}
+
         <Text style={styles.orText}>or login with</Text>
         <View style={styles.loginOptionsContainer}>
           <TouchableOpacity style={styles.logoContainer}>
@@ -234,6 +230,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#d5715b",
   },
   btnText: {
+    letterSpacing: 1.1,
+
     fontSize: 24,
     fontWeight: "500",
     color: "#fff",

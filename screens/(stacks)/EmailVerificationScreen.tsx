@@ -1,63 +1,60 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import OtpInput from "../../components/OtpInput";
+import EmailVerificationInput from "../../components/EmailVerificationInput";
 
-const statusBarHeight = StatusBar.currentHeight || 0;
-const OtpScreen = ({ navigation }: any) => {
-  const otpLength = 4;
-  const [isOtpFilled, setIsOtpFilled] = useState<boolean>(false);
-  const [otp, setOtp] = useState<string[]>(new Array(otpLength).fill(""));
-  const [otpError, setOtpError] = useState<string>("");
+const EmailVerificationScreen = ({ navigation }: any) => {
+  const codeLength = 4;
+  const [isCodeFilled, setIsCodeFilled] = useState<boolean>(false);
+  const [code, setCode] = useState<string[]>(new Array(codeLength).fill(""));
+  const [codeError, setCodeError] = useState<string>("");
 
   useEffect(() => {
-    setOtpError("");
-    if (otp.findIndex((value) => value === "") < 0) {
-      setIsOtpFilled(true);
+    setCodeError("");
+    if (code.findIndex((value) => value === "") < 0) {
+      setIsCodeFilled(true);
     } else {
-      setIsOtpFilled(false);
+      setIsCodeFilled(false);
     }
-  }, [otp]);
+  }, [code]);
 
   const onSubmitPress = (): void => {
-    console.log(otp.join(""));
-    if (otp.join("") == "1234") {
-      setOtpError("");
+    console.log(code.join(""));
+    if (code.join("") == "1234") {
+      setCodeError("");
       navigation.navigate("Welcome");
     } else {
-      setOtpError("Wrong OTP");
+      setCodeError("Wrong OTP");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.appName, { marginTop: statusBarHeight + 40 }]}>
-        FarmerEats
+      <Text style={styles.appName}>My-App</Text>
+      <Text style={styles.verify}>
+        Enter verification code sent on your email
       </Text>
-      <Text style={styles.verify}>Verify OTP</Text>
       <View style={{ flexDirection: "row", gap: 10, marginBottom: 40 }}>
-        <Text style={styles.remember}>Remember your password?</Text>
+        <Text style={styles.remember}>Already have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text style={styles.loginBtn}>Login</Text>
         </TouchableOpacity>
       </View>
-      {otpError !== "" ? (
-        <Text style={{ color: "red" }}>{otpError}</Text>
+      {codeError !== "" ? (
+        <Text style={{ color: "red" }}>{codeError}</Text>
       ) : null}
 
-      {otpLength ? (
-        <OtpInput otp={otp} setOtp={setOtp} otpLength={otpLength} />
+      {codeLength ? (
+        <EmailVerificationInput
+          code={code}
+          setCode={setCode}
+          codeLength={codeLength}
+        />
       ) : null}
       <TouchableOpacity
         activeOpacity={0.6}
         onPress={onSubmitPress}
-        style={[styles.submitBtn, { opacity: isOtpFilled ? 1 : 0.5 }]}
-        disabled={!isOtpFilled}
+        style={[styles.submitBtn, { opacity: isCodeFilled ? 1 : 0.5 }]}
+        disabled={!isCodeFilled}
       >
         <Text style={styles.submitBtnText}>Submit</Text>
       </TouchableOpacity>
@@ -75,6 +72,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
   },
   appName: {
+    marginTop: 40,
     fontSize: 24,
     fontWeight: "400",
     marginBottom: 80,
@@ -117,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OtpScreen;
+export default EmailVerificationScreen;
